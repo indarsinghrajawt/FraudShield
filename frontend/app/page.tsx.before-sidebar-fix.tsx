@@ -1,0 +1,219 @@
+﻿"use client";
+
+import { useEffect, useState } from "react";
+
+type Analytics = {
+  total_transactions: number;
+  fraud_transactions: number;
+  normal_transactions: number;
+  fraud_rate: number;
+};
+
+export default function Home() {
+  const [analytics, setAnalytics] = useState<Analytics | null>(null);
+
+  useEffect(() => {
+    fetch("http://127.0.0.1:8000/analytics")
+      .then((res) => res.json())
+      .then((data) => setAnalytics(data))
+      .catch((error) => console.error("Analytics error:", error));
+  }, []);
+
+  return (
+    <main className="min-h-screen bg-[#070b14] text-white">
+      <div className="flex min-h-screen">
+
+        <aside className="hidden w-64 border-r border-white/10 bg-[#0b1020] p-6 md:block">
+          <h1 className="text-2xl font-bold">
+            🛡️ Fraud<span className="text-cyan-400">Shield</span>
+          </h1>
+
+          <nav className="mt-10 space-y-3">
+            <div className="rounded-xl bg-cyan-500/10 px-4 py-3 text-cyan-400">
+              Dashboard
+            </div>
+            <div className="px-4 py-3 text-gray-400">
+              Transactions
+            </div>
+            <div className="px-4 py-3 text-gray-400">
+              Risk Analysis
+            </div>
+            <div className="px-4 py-3 text-gray-400">
+              Alerts
+            </div>
+            <div className="px-4 py-3 text-gray-400">
+              Analytics
+            </div>
+          </nav>
+        </aside>
+
+        <section className="flex-1 p-6 md:p-10">
+
+          <div className="mb-8">
+            <p className="text-sm text-cyan-400">
+              AI FRAUD INTELLIGENCE
+            </p>
+
+            <h2 className="mt-2 text-4xl font-bold">
+              Fraud Detection Dashboard
+            </h2>
+
+            <p className="mt-2 text-gray-400">
+              Real-time overview of transaction risk.
+            </p>
+          </div>
+
+          <div className="grid gap-5 md:grid-cols-3">
+
+            <div className="rounded-2xl border border-white/10 bg-[#0d1424] p-6">
+              <p className="text-gray-400">
+                Total Transactions
+              </p>
+
+              <p className="mt-2 text-3xl font-bold">
+                {analytics?.total_transactions ?? "..."}
+              </p>
+            </div>
+
+            <div className="rounded-2xl border border-red-500/20 bg-[#0d1424] p-6">
+              <p className="text-gray-400">
+                Fraud Cases
+              </p>
+
+              <p className="mt-2 text-3xl font-bold text-red-400">
+                {analytics?.fraud_transactions ?? "..."}
+              </p>
+            </div>
+
+            <div className="rounded-2xl border border-orange-500/20 bg-[#0d1424] p-6">
+              <p className="text-gray-400">
+                Fraud Rate
+              </p>
+
+              <p className="mt-2 text-3xl font-bold text-orange-400">
+                {analytics ? `${analytics.fraud_rate}%` : "..."}
+              </p>
+            </div>
+
+          </div>
+
+          <div className="mt-8 grid gap-6 md:grid-cols-2">
+
+            <div className="rounded-2xl border border-white/10 bg-[#0d1424] p-7">
+              <h3 className="text-xl font-semibold">
+                Transaction Overview
+              </h3>
+
+              <div className="mt-8 space-y-5">
+
+                <div>
+                  <div className="mb-2 flex justify-between">
+                    <span className="text-gray-400">
+                      Normal
+                    </span>
+
+                    <span>
+                      {analytics?.normal_transactions ?? "..."}
+                    </span>
+                  </div>
+
+                  <div className="h-3 overflow-hidden rounded-full bg-white/10">
+                    <div
+                      className="h-full rounded-full bg-cyan-400"
+                      style={{
+                        width: analytics
+                          ? `${(analytics.normal_transactions / analytics.total_transactions) * 100}%`
+                          : "0%",
+                      }}
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <div className="mb-2 flex justify-between">
+                    <span className="text-gray-400">
+                      Fraud
+                    </span>
+
+                    <span className="text-red-400">
+                      {analytics?.fraud_transactions ?? "..."}
+                    </span>
+                  </div>
+
+                  <div className="h-3 overflow-hidden rounded-full bg-white/10">
+                    <div
+                      className="h-full rounded-full bg-red-500"
+                      style={{
+                        width: analytics
+                          ? `${analytics.fraud_rate}%`
+                          : "0%",
+                      }}
+                    />
+                  </div>
+                </div>
+
+              </div>
+            </div>
+
+            <div className="rounded-2xl border border-white/10 bg-[#0d1424] p-7">
+              <h3 className="text-xl font-semibold">
+                System Status
+              </h3>
+
+              <div className="mt-7 space-y-4">
+
+                <div className="flex items-center justify-between">
+                  <span className="text-gray-400">
+                    ML Model
+                  </span>
+
+                  <span className="rounded-full bg-green-500/10 px-3 py-1 text-sm text-green-400">
+                    ● Online
+                  </span>
+                </div>
+
+                <div className="flex items-center justify-between">
+                  <span className="text-gray-400">
+                    Fraud API
+                  </span>
+
+                  <span className="rounded-full bg-green-500/10 px-3 py-1 text-sm text-green-400">
+                    ● Online
+                  </span>
+                </div>
+
+                <div className="flex items-center justify-between">
+                  <span className="text-gray-400">
+                    Dataset
+                  </span>
+
+                  <span className="rounded-full bg-green-500/10 px-3 py-1 text-sm text-green-400">
+                    ● Loaded
+                  </span>
+                </div>
+
+              </div>
+            </div>
+
+          </div>
+
+          <div className="mt-8 rounded-2xl border border-cyan-500/20 bg-cyan-500/5 p-7">
+            <p className="text-sm text-cyan-400">
+              FRAUDSHIELD ENGINE
+            </p>
+
+            <h3 className="mt-2 text-2xl font-semibold">
+              AI-powered transaction risk detection
+            </h3>
+
+            <p className="mt-2 max-w-2xl text-gray-400">
+              Every transaction can be evaluated by the trained
+              machine-learning model and assigned a fraud probability.
+            </p>
+          </div>
+
+        </section>
+      </div>
+    </main>
+  );
+}
