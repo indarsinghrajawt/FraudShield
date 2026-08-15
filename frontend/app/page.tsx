@@ -63,6 +63,7 @@ export default function Dashboard() {
   }
 
   useEffect(() => {
+    setMounted(true);
     loadData();
   }, []);
 
