@@ -38,6 +38,7 @@ export default function Dashboard() {
   const router = useRouter();
 
   const [data, setData] = useState<Analytics | null>(null);
+  const [mounted, setMounted] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
@@ -65,7 +66,7 @@ export default function Dashboard() {
     loadData();
   }, []);
 
-  if (loading) {
+  if (!mounted || loading) {
     return (
       <main className="flex min-h-screen items-center justify-center bg-[#050814] text-white">
         <div className="text-center">
