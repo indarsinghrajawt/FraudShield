@@ -18,7 +18,7 @@ export default function AdminDashboard() {
     async function loadDashboard() {
       try {
         const analyticsResponse = await fetch(
-          "http://localhost:8000/analytics",
+          "https://fraudshield-cvly.onrender.com/analytics",
           {
             cache: "no-store",
           }
@@ -41,7 +41,7 @@ export default function AdminDashboard() {
   async function logout() {
     try {
       await fetch(
-        "http://localhost:8000/admin/logout",
+        "https://fraudshield-cvly.onrender.com/admin/logout",
         {
           method: "POST",
           credentials: "include",

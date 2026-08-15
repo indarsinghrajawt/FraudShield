@@ -23,7 +23,7 @@ export default function UsersPage() {
   async function loadUsers() {
     try {
       const response = await fetch(
-        "http://localhost:8000/admin/users",
+        "https://fraudshield-cvly.onrender.com/admin/users",
         {
           credentials: "include",
         }
@@ -58,7 +58,7 @@ export default function UsersPage() {
 
     try {
       const response = await fetch(
-        "http://localhost:8000/admin/users",
+        "https://fraudshield-cvly.onrender.com/admin/users",
         {
           method: "POST",
           credentials: "include",
@@ -93,7 +93,7 @@ export default function UsersPage() {
   async function toggleStatus(id: number) {
     try {
       const response = await fetch(
-        `http://localhost:8000/admin/users/${id}/status`,
+        `https://fraudshield-cvly.onrender.com/admin/users/${id}/status`,
         {
           method: "PATCH",
           credentials: "include",

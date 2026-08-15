@@ -31,7 +31,7 @@ export default function TransactionDetailsPage() {
     async function loadTransaction() {
       try {
         const response = await fetch(
-          `http://localhost:8000/transactions/${id}`
+          `https://fraudshield-cvly.onrender.com/transactions/${id}`
         );
 
         const data = await response.json();

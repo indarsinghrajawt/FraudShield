@@ -19,7 +19,7 @@ export default function FraudAlertsPage() {
       setLoading(true);
 
       const response = await fetch(
-        "http://127.0.0.1:8000/admin/alerts",
+        "https://fraudshield-cvly.onrender.com/admin/alerts",
         {
           credentials: "include",
           cache: "no-store",

@@ -51,7 +51,7 @@ export default function PredictPage() {
 
     try {
       const response = await fetch(
-        "http://localhost:8000/predict",
+        "https://fraudshield-cvly.onrender.com/predict",
         {
           method: "POST",
           headers: {

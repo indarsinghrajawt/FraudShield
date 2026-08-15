@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
@@ -34,7 +34,7 @@ export default function TransactionsPage() {
       setLoading(true);
 
       const response = await fetch(
-        "http://127.0.0.1:8000/transactions",
+        "https://fraudshield-cvly.onrender.com/transactions",
         { cache: "no-store" }
       );
 
@@ -78,7 +78,7 @@ export default function TransactionsPage() {
       formData.append("file", file);
 
       const response = await fetch(
-        "http://127.0.0.1:8000/transactions/upload",
+        "https://fraudshield-cvly.onrender.com/transactions/upload",
         {
           method: "POST",
           body: formData,
