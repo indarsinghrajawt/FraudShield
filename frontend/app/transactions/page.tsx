@@ -21,6 +21,9 @@ export default function TransactionsPage() {
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const [transactions, setTransactions] = useState<Transaction[]>([]);
+  const [totalTransactions, setTotalTransactions] = useState(0);
+  const [totalFraudCount, setTotalFraudCount] = useState(0);
+  const [totalFraud, setTotalFraud] = useState(0);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [uploading, setUploading] = useState(false);
@@ -34,7 +37,7 @@ export default function TransactionsPage() {
       setLoading(true);
 
       const response = await fetch(
-        "https://fraudshield-cvly.onrender.com/transactions",
+        "http://127.0.0.1:8000/transactions?limit=100",
         { cache: "no-store" }
       );
 
@@ -45,6 +48,8 @@ export default function TransactionsPage() {
       const data = await response.json();
 
       setTransactions(data.transactions || []);
+      setTotalTransactions(Number(data.total ?? 0));
+      setTotalFraudCount(Number(data.fraud_count ?? 0));
       setError("");
     } catch (err: any) {
       setError(err.message || "Unable to load transactions");
@@ -78,7 +83,7 @@ export default function TransactionsPage() {
       formData.append("file", file);
 
       const response = await fetch(
-        "https://fraudshield-cvly.onrender.com/transactions/upload",
+        "http://127.0.0.1:8000/transactions/upload",
         {
           method: "POST",
           body: formData,
@@ -92,7 +97,7 @@ export default function TransactionsPage() {
       }
 
       setUploadMessage(
-        `CSV uploaded successfully — ${data.uploaded_rows} rows loaded.`
+        `CSV uploaded successfully - ${data.uploaded_rows} rows loaded.`
       );
 
       await loadTransactions();
@@ -132,11 +137,9 @@ export default function TransactionsPage() {
     return matchesSearch && matchesStatus && matchesCategory;
   });
 
-  const fraudCount = transactions.filter(
-    (t) => Number(t.FraudIndicator) === 1
-  ).length;
+  const fraudCount = totalFraudCount;
 
-  const normalCount = transactions.length - fraudCount;
+  const normalCount = totalTransactions - totalFraudCount;
 
   const categories = Array.from(
     new Set(
@@ -158,7 +161,7 @@ export default function TransactionsPage() {
               onClick={() => router.push("/")}
               className="mb-5 text-sm text-cyan-400 transition hover:text-cyan-300"
             >
-              ← Back to Dashboard
+              Back to Dashboard
             </button>
 
             <p className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-400">
@@ -188,7 +191,7 @@ export default function TransactionsPage() {
               disabled={uploading}
               className="rounded-xl bg-gradient-to-r from-violet-600 to-cyan-500 px-6 py-3 font-semibold shadow-lg shadow-violet-500/10 transition hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-50"
             >
-              {uploading ? "Uploading..." : "＋ Upload CSV"}
+              {uploading ? "Uploading..." : "+ Upload CSV"}
             </button>
           </div>
 
@@ -197,7 +200,7 @@ export default function TransactionsPage() {
         {/* MESSAGES */}
         {uploadMessage && (
           <div className="mb-6 rounded-xl border border-green-400/20 bg-green-400/5 p-4 text-sm text-green-400">
-            ✓ {uploadMessage}
+              {uploadMessage}
           </div>
         )}
 
@@ -352,11 +355,11 @@ export default function TransactionsPage() {
                         </td>
 
                         <td className="px-6 py-5 text-sm text-gray-400">
-                          {transaction.CustomerID ?? "—"}
+                          {transaction.CustomerID ?? "-"}
                         </td>
 
                         <td className="px-6 py-5 font-semibold">
-                          ₹{amount.toFixed(2)}
+                          Rs.{amount.toFixed(2)}
                         </td>
 
                         <td className="px-6 py-5">
@@ -380,11 +383,11 @@ export default function TransactionsPage() {
                         <td className="px-6 py-5">
                           {fraud ? (
                             <span className="rounded-full bg-red-400/10 px-3 py-1.5 text-xs font-semibold text-red-400">
-                              🚨 FRAUD
+                              FRAUD
                             </span>
                           ) : (
                             <span className="rounded-full bg-green-400/10 px-3 py-1.5 text-xs font-semibold text-green-400">
-                              ● NORMAL
+                              NORMAL
                             </span>
                           )}
                         </td>
@@ -396,7 +399,7 @@ export default function TransactionsPage() {
                             }
                             className="rounded-lg border border-cyan-400/20 px-4 py-2 text-xs font-semibold text-cyan-400 transition hover:border-cyan-400/50 hover:bg-cyan-400/5"
                           >
-                            View Details →
+                            View Details
                           </button>
                         </td>
 
@@ -429,7 +432,7 @@ export default function TransactionsPage() {
             onClick={loadTransactions}
             className="rounded-xl border border-white/10 px-5 py-2.5 text-sm text-gray-300 transition hover:border-cyan-400/30 hover:text-white"
           >
-            ↻ Refresh Data
+            Refresh Data
           </button>
 
         </div>
@@ -480,3 +483,4 @@ function StatCard({
     </div>
   );
 }
+

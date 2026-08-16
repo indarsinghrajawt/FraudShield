@@ -38,7 +38,6 @@ export default function Dashboard() {
   const router = useRouter();
 
   const [data, setData] = useState<Analytics | null>(null);
-  const [mounted, setMounted] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
@@ -63,11 +62,10 @@ export default function Dashboard() {
   }
 
   useEffect(() => {
-    setMounted(true);
     loadData();
   }, []);
 
-  if (!mounted || loading) {
+  if (loading) {
     return (
       <main className="flex min-h-screen items-center justify-center bg-[#050814] text-white">
         <div className="text-center">
@@ -330,9 +328,6 @@ export default function Dashboard() {
 
                     <YAxis
                       stroke="#64748b"
-                      scale="log"
-                      domain={[1, "auto"]}
-                      allowDataOverflow={false}
                       tickFormatter={(value) =>
                         value >= 1000
                           ? `${Math.round(value / 1000)}k`

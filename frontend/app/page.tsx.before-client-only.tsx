@@ -330,9 +330,6 @@ export default function Dashboard() {
 
                     <YAxis
                       stroke="#64748b"
-                      scale="log"
-                      domain={[1, "auto"]}
-                      allowDataOverflow={false}
                       tickFormatter={(value) =>
                         value >= 1000
                           ? `${Math.round(value / 1000)}k`

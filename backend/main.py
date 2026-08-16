@@ -259,10 +259,32 @@ def transactions(limit: int = 100):
     path = Path("backend/data/transactions.csv")
     df = pd.read_csv(path)
 
-    records = df.head(limit).fillna("").to_dict(orient="records")
+    fraud_df = df[df["FraudIndicator"] == 1].copy()
+    normal_df = df[df["FraudIndicator"] != 1].copy()
+
+    # Show both fraud and normal transactions in the table
+    # Return the complete dataset when requested
+    if limit >= len(df):
+        ordered_df = df
+    else:
+        # Keep fraud and normal transactions visible on normal-sized pages
+        fraud_limit = min(len(fraud_df), max(1, limit // 2))
+        normal_limit = min(len(normal_df), limit - fraud_limit)
+
+        selected_fraud = fraud_df.head(fraud_limit)
+        selected_normal = normal_df.head(normal_limit)
+
+        ordered_df = pd.concat(
+            [selected_fraud, selected_normal],
+            ignore_index=True
+        )
+
+    records = ordered_df.fillna("").to_dict(orient="records")
 
     return {
         "count": len(records),
+        "total": len(df),
+        "fraud_count": int(fraud_df.shape[0]),
         "transactions": records
     }
 @app.get("/transactions/{transaction_id}")

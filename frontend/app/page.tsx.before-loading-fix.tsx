@@ -38,9 +38,7 @@ export default function Dashboard() {
   const router = useRouter();
 
   const [data, setData] = useState<Analytics | null>(null);
-  const [mounted, setMounted] = useState(false);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
 
   async function loadData() {
     try {
@@ -63,11 +61,10 @@ export default function Dashboard() {
   }
 
   useEffect(() => {
-    setMounted(true);
     loadData();
   }, []);
 
-  if (!mounted || loading) {
+  if (loading || !data) {
     return (
       <main className="flex min-h-screen items-center justify-center bg-[#050814] text-white">
         <div className="text-center">
@@ -80,36 +77,6 @@ export default function Dashboard() {
     );
   }
 
-  if (error || !data) {
-    return (
-      <main className="flex min-h-screen items-center justify-center bg-[#050814] px-6 text-white">
-        <div className="w-full max-w-lg rounded-2xl border border-red-500/20 bg-[#090f1d] p-8 text-center">
-          <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-red-500/10 text-2xl">
-            ⚠️
-          </div>
-
-          <h1 className="mt-5 text-2xl font-bold">
-            FraudShield Backend Unavailable
-          </h1>
-
-          <p className="mt-3 text-sm text-gray-400">
-            Unable to connect to the production analytics API.
-          </p>
-
-          <p className="mt-4 rounded-lg bg-black/30 p-3 text-xs text-red-400">
-            {error || "No analytics data received"}
-          </p>
-
-          <button
-            onClick={loadData}
-            className="mt-6 rounded-xl bg-cyan-500 px-6 py-3 font-semibold text-black hover:bg-cyan-400"
-          >
-            Retry Connection
-          </button>
-        </div>
-      </main>
-    );
-  }
   const total = data.total_transactions;
   const fraud = data.fraud_transactions;
   const normal = data.normal_transactions;
@@ -330,9 +297,6 @@ export default function Dashboard() {
 
                     <YAxis
                       stroke="#64748b"
-                      scale="log"
-                      domain={[1, "auto"]}
-                      allowDataOverflow={false}
                       tickFormatter={(value) =>
                         value >= 1000
                           ? `${Math.round(value / 1000)}k`
