@@ -37,7 +37,7 @@ export default function TransactionsPage() {
       setLoading(true);
 
       const response = await fetch(
-        "http://127.0.0.1:8000/transactions?limit=100",
+        "https://fraudshield-cvly.onrender.com/transactions?limit=100",
         { cache: "no-store" }
       );
 
@@ -83,7 +83,7 @@ export default function TransactionsPage() {
       formData.append("file", file);
 
       const response = await fetch(
-        "http://127.0.0.1:8000/transactions/upload",
+        "https://fraudshield-cvly.onrender.com/transactions/upload",
         {
           method: "POST",
           body: formData,
