@@ -21,7 +21,6 @@ AI-powered fraud detection platform for analyzing transactions and identifying p
 ## 🌐 Live Demo
 
 **Frontend:** https://fraudshield-beta.vercel.app  
-**Backend:** https://fraudshield-cvly.onrender.com
 
 ## 👨‍💻 Author
 
